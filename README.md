@@ -45,6 +45,7 @@ final items = List<String>();            // ✅ Fixed
 ### Output
 
 The extension writes detailed logs to the **Dart Generic Auto-Fix** output channel, showing:
+
 - Number of diagnostics found
 - Successful fixes with file locations
 - Skipped items with reasons
@@ -69,4 +70,4 @@ No configuration required. The extension works out of the box with any Flutter/D
 
 ## License
 
-MIT
+Apache 2.0

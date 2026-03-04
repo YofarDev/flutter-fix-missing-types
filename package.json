@@ -1,6 +1,6 @@
 {
   "name": "flutter-fix-missing-types",
-  "repository": {"url": ""},
+  "repository": {"url": "https://github.com/YofarDev/flutter-fix-missing-types"},
   "displayName": "Flutter Fix Missing Types",
   "description": "To fix missing types in a flutter project that dart fix --apply won't",
   "version": "0.0.1",
