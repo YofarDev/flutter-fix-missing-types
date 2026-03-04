@@ -1,71 +1,72 @@
-# flutter-fix-missing-types README
+# Flutter Fix Missing Types
 
-This is the README for your extension "flutter-fix-missing-types". After writing up a brief description, we recommend including the following sections.
+A VSCode extension that automatically fixes missing generic type annotations in Dart/Flutter projects.
 
 ## Features
 
-Describe specific features of your extension including screenshots of your extension in action. Image paths are relative to this README file.
+Automatically fixes `always_specify_types` lint warnings by inserting inferred generic type annotations:
 
-For example if there is an image subfolder under your extension project workspace:
+- **Fix Current File** - Fix all missing types in the active Dart file
+- **Fix Entire Project** - Scan and fix missing types across all Dart files in your Flutter project
 
-\!\[feature X\]\(images/feature-x.png\)
+## How It Works
 
-> Tip: Many popular extensions utilize animations. This is an excellent way to show off your extension! We recommend short, focused animations that are easy to follow.
+The extension leverages VSCode's built-in diagnostic API to locate `always_specify_types` warnings, then uses the Dart language server's hover information to extract the inferred generic types and automatically inserts them into your code.
+
+### Before
+
+```dart
+final bloc = MyBloc(); // ❌ always_specify_types warning
+final items = List();   // ❌ missing type argument
+```
+
+### After
+
+```dart
+final bloc = MyBloc<MyEvent, MyState>(); // ✅ Fixed
+final items = List<String>();            // ✅ Fixed
+```
 
 ## Requirements
 
-If you have any requirements or dependencies, add a section describing those and how to install and configure them.
+- [Dart extension for VSCode](https://marketplace.visualstudio.com/items?itemName=Dart-Code.dart-code) (required for diagnostics)
+- Flutter/Dart SDK
+- `always_specify_types` lint rule enabled in your `analysis_options.yaml`
 
-## Extension Settings
+## Usage
 
-Include if your extension adds any VS Code settings through the `contributes.configuration` extension point.
+### Command Palette
 
-For example:
+1. Open the Command Palette (`Cmd+Shift+P` / `Ctrl+Shift+P`)
+2. Select one of:
+   - `Dart: Auto-Fix Missing Types (Current File)`
+   - `Dart: Auto-Fix Missing Types (Whole Project)`
 
-This extension contributes the following settings:
+### Output
 
-* `myExtension.enable`: Enable/disable this extension.
-* `myExtension.thing`: Set to `blah` to do something.
+The extension writes detailed logs to the **Dart Generic Auto-Fix** output channel, showing:
+- Number of diagnostics found
+- Successful fixes with file locations
+- Skipped items with reasons
+
+## How It Differs from `dart fix --apply`
+
+The standard `dart fix --apply` command cannot fix `always_specify_types` warnings because the Dart analyzer doesn't provide automated fixes for this lint rule. This extension bridges that gap by:
+
+1. Using the Dart extension's real-time diagnostics (no subprocess overhead)
+2. Extracting inferred types from hover information
+3. Applying targeted edits to insert the missing types
+
+## Configuration
+
+No configuration required. The extension works out of the box with any Flutter/Dart project that has the Dart extension installed.
 
 ## Known Issues
 
-Calling out known issues can help limit users opening duplicate issues against your extension.
+- Only fixes simple generic types (e.g., `List<String>`, `Map<K, V>`)
+- Complex nested generics may not be parsed correctly
+- Requires the Dart extension to have analyzed the file (open the file first if needed)
 
-## Release Notes
+## License
 
-Users appreciate release notes as you update your extension.
-
-### 1.0.0
-
-Initial release of ...
-
-### 1.0.1
-
-Fixed issue #.
-
-### 1.1.0
-
-Added features X, Y, and Z.
-
----
-
-## Following extension guidelines
-
-Ensure that you've read through the extensions guidelines and follow the best practices for creating your extension.
-
-* [Extension Guidelines](https://code.visualstudio.com/api/references/extension-guidelines)
-
-## Working with Markdown
-
-You can author your README using Visual Studio Code. Here are some useful editor keyboard shortcuts:
-
-* Split the editor (`Cmd+\` on macOS or `Ctrl+\` on Windows and Linux).
-* Toggle preview (`Shift+Cmd+V` on macOS or `Shift+Ctrl+V` on Windows and Linux).
-* Press `Ctrl+Space` (Windows, Linux, macOS) to see a list of Markdown snippets.
-
-## For more information
-
-* [Visual Studio Code's Markdown Support](http://code.visualstudio.com/docs/languages/markdown)
-* [Markdown Syntax Reference](https://help.github.com/articles/markdown-basics/)
-
-**Enjoy!**
+MIT
